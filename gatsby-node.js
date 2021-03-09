@@ -85,7 +85,7 @@ exports.sourceNodes = async (
                   parent: null,
                   children: [],
                   internal: {
-                    type: `salonized${object.capitalize()})`,
+                    type: `salonized${object.capitalize()}`,
                     content: "",
                     contentDigest: createContentDigest(objectData),
                   },
