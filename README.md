@@ -42,7 +42,7 @@ Make sure that your `.env.*` files are listed in `.gitignore` so you're not shar
 
 2. Next, you can just access the different nodes via GraphQL:
 
-```json
+```javascript
 allSalonizedCustomers {
   edges {
     node {
