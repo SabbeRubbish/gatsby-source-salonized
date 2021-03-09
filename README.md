@@ -1,113 +1,97 @@
-<p align="center">
-  <a href="https://www.gatsbyjs.com">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Starter for a Gatsby Plugin
-</h1>
+# gatsby-source-salonized
 
-A minimal boilerplate for the essential files Gatsby looks for in a plugin.
+Source plugin for pulling several content types into Gatsby from a [Salonized](https://www.salonized.com) subscription. It creates nodes so the data can be queried using GraphQL.
 
-## 🚀 Quick start
+You need a paid subscription at Salonized to be able to use this source plugin.
 
-To get started creating a new plugin, you can follow these steps:
+**DISCLAIMER:**
+Officially, there is no API for Salonized to get this information from. Luckily, their platform uses a great front-end API that we can access using cookie authentication.
+Use this API at your own discretion and don't count on it being available forever.
 
-1. Initialize a new plugin from the starter with `gatsby new`
+## Install
 
 ```shell
-gatsby new my-plugin https://github.com/gatsbyjs/gatsby-starter-plugin
+npm install gatsby-source-salonized
 ```
 
-If you already have a Gatsby site, you can use it. Otherwise, you can [create a new Gatsby site](https://www.gatsbyjs.com/tutorial/part-zero/#create-a-gatsby-site) to test your plugin.
+## Usage
 
-Your directory structure will look similar to this:
+1. You'll have to enter your admin username and password in the configuration of the plugin. I advise to use environment variable files `.env.development` and `env.production` for this:
 
 ```text
-/my-gatsby-site
-├── gatsby-config.js
-└── /src
-    └── /pages
-        └── /index.js
-/my-plugin
-├── gatsby-browser.js
-├── gatsby-node.js
-├── gatsby-ssr.js
-├── index.js
-├── package.json
-└── README.md
+SALONIZED_EMAIL=<username>
+SALONIZED_PASSWORD=<password>
 ```
-
-With `my-gatsby-site` being your Gatsby site, and `my-plugin` being your plugin. You could also include the plugin in your [site's `plugins` folder](https://www.gatsbyjs.com/docs/loading-plugins-from-your-local-plugins-folder/).
-
-2. Include the plugin in a Gatsby site
-
-Inside of the `gatsby-config.js` file of your site (in this case, `my-gatsby-site`), include the plugin in the `plugins` array:
-
+and:
 ```javascript
+// In your gatsby-config.js
 module.exports = {
   plugins: [
-    // other gatsby plugins
-    // ...
-    require.resolve(`../my-plugin`),
+    {
+      resolve: `gatsby-source-salonized`,
+      options: {
+        salonizedEmail: process.env.SALONIZED_EMAIL,
+        salonizedPassword: process.env.SALONIZED_PASSWORD,
+      },
+    },
   ],
+};
+```
+
+Make sure that your `.env.*` files are listed in `.gitignore` so you're not sharing this with anyone. You'll also have to add them to your Gatsby Cloud, Netlify, ... host.
+
+2. Next, you can just access the different nodes via GraphQL:
+
+```json
+allSalonizedCustomers {
+  edges {
+    node {
+      first_name
+      last_name
+      email
+      newsletter_enabled
+      state
+      birthday_wishes_enabled
+    }
+  }
 }
 ```
 
-The line `require.resolve('../my-plugin')` is what accesses the plugin based on its filepath on your computer, and adds it as a plugin when Gatsby runs.
+All fields that are returned from the Salonized API are available.
 
-_You can use this method to test and develop your plugin before you publish it to a package registry like npm. Once published, you would instead install it and [add the plugin name to the array](https://www.gatsbyjs.com/docs/using-a-plugin-in-your-site/). You can read about other ways to connect your plugin to your site including using `npm link` or `yarn workspaces` in the [doc on creating local plugins](https://www.gatsbyjs.com/docs/creating-a-local-plugin/#developing-a-local-plugin-that-is-outside-your-project)._
+## Supported entity types
 
-3. Verify the plugin was added correctly
+Currently, the following entity types are available:
+- products
+- services
+- appointments
+- orders
+- customers
+- messages
+- customer feedback
 
-The plugin added by the starter implements a single Gatsby API in the `gatsby-node` that logs a message to the console. When you run `gatsby develop` or `gatsby build` in the site that implements your plugin, you should see this message.
+I'm still learning about useful API calls as there is no documentation from Salonized on this.
 
-You can verify your plugin was added to your site correctly by running `gatsby develop` for the site.
+**TODO:** links between content types (customer -> )
 
-You should now see a message logged to the console in the preinit phase of the Gatsby build process:
+## Authentication (internals)
 
-```shell
-$ gatsby develop
-success open and validate gatsby-configs - 0.033s
-success load plugins - 0.074s
-Loaded gatsby-starter-plugin
-success onPreInit - 0.016s
-...
-```
+As I mentioned before, there is no official OAuth-secured API available, as confirmed by Salonized customer support.
 
-4. Rename the plugin in the `package.json`
+However, using cookie authentication, it is possible to query lots of information from your Salonized account.
 
-When you clone the site, the information in the `package.json` will need to be updated. Name your plugin based off of [Gatsby's conventions for naming plugins](https://www.gatsbyjs.com/docs/naming-a-plugin/).
+The cookie authentication is executed with every build of Gatsby. This means that your username/password is sent (securly over HTTPS) to get a session cookie. They seem to be valid for 2 years, but I'd rather not store them. The cookie retrieval is not done using virtual form submission, but by posting to `https://api.salonized.com/sessions`.
 
-## 🧐 What's inside?
+After that, the received cookie is used to get the other information out.
 
-This starter generates the [files Gatsby looks for in plugins](https://www.gatsbyjs.com/docs/files-gatsby-looks-for-in-a-plugin/).
+## Updates / Subscription / Webhooks
 
-```text
-/my-plugin
-├── .gitignore
-├── gatsby-browser.js
-├── gatsby-node.js
-├── gatsby-ssr.js
-├── index.js
-├── LICENSE
-├── package.json
-└── README.md
-```
+There are no webhooks in Salonized (as far as I know) and the platform isn't really extensible for account owners. That means that content updates like orders, customers, products, .. are only updated on Gatsby build!
 
-- **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
-- **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.com/docs/browser-apis/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
-- **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.com/docs/node-apis/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
-- **`gatsby-ssr.js`**: This file is where Gatsby expects to find any usage of the [Gatsby server-side rendering APIs](https://www.gatsbyjs.com/docs/ssr-apis/) (if any). These allow customization of default Gatsby settings affecting server-side rendering.
-- **`index.js`**: A file that will be loaded by default when the plugin is [required by another application](https://docs.npmjs.com/creating-node-js-modules#create-the-file-that-will-be-loaded-when-your-module-is-required-by-another-application0). You can adjust what file is used by updating the `main` field of the `package.json`.
-- **`LICENSE`**: This plugin starter is licensed under the 0BSD license. This means that you can see this file as a placeholder and replace it with your own license.
-- **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the plugin's name, author, etc). This manifest is how npm knows which packages to install for your project.
-- **`README.md`**: A text file containing useful reference information about your plugin.
+This means that you need to rebuild your (static) Gatsby site for each content update you make. This is normal behaviour for these static Gatsby sites, but is definitely more problematic if no webhooks are available. 
 
-## 🎓 Learning Gatsby
+You were warned.
 
-If you're looking for more guidance on plugins, how they work, or what their role is in the Gatsby ecosystem, check out some of these resources:
+## License
 
-- The [Creating Plugins](https://www.gatsbyjs.com/docs/creating-plugins/) section of the docs has information on authoring and maintaining plugins yourself.
-- The conceptual guide on [Plugins, Themes, and Starters](https://www.gatsbyjs.com/docs/plugins-themes-and-starters/) compares and contrasts plugins with other pieces of the Gatsby ecosystem. It can also help you [decide what to choose between a plugin, starter, or theme](https://www.gatsbyjs.com/docs/plugins-themes-and-starters/#deciding-which-to-use).
-- The [Gatsby plugin library](https://www.gatsbyjs.com/plugins/) has over 1750 official as well as community developed plugins that can get you up and running faster and borrow ideas from.
+[MIT](https://choosealicense.com/licenses/mit/)
