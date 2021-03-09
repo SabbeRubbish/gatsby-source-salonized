@@ -1,5 +1,5 @@
 {
-  "name": "gatsby-source-salonized",
+  "name": "@sabberubbish/gatsby-source-salonized",
   "version": "1.0.0",
   "description": "A source plugin that retrieves data from Salonized",
   "main": "index.js",
@@ -14,7 +14,15 @@
     "salon app"
   ],
   "author": "Sebastiaan Mindreau <sebastiaan.mindreau@gmail.com>",
-  "license": "0BSD",
-  "dependencies": {
-  }
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SabbeRubbish/gatsby-source-salonized.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SabbeRubbish/gatsby-source-salonized/issues"
+  },
+  "homepage": "https://github.com/SabbeRubbish/gatsby-source-salonized#readme"
 }
