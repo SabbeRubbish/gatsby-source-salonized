@@ -1,7 +1,7 @@
 {
-  "name": "gatsby-source-api-csv",
+  "name": "gatsby-source-salonized",
   "version": "1.0.0",
-  "description": "A basic source plugin that retrieves CSV data from a public cookie-authenticated URL",
+  "description": "A source plugin that retrieves data from Salonized",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,8 +9,9 @@
   },
   "keywords": [
     "gatsby",
-    "gatsby-plugin",
-    "salonized"
+    "gatsby-source",
+    "salonized",
+    "salon app"
   ],
   "author": "Sebastiaan Mindreau <sebastiaan.mindreau@gmail.com>",
   "license": "0BSD",

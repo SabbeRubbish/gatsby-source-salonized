@@ -25,9 +25,9 @@ const objectsToFetch = [
   "feedbacks",
 ];
 
-String.prototype.capitalize = function() {
+String.prototype.capitalize = function () {
   return this.charAt(0).toUpperCase() + this.slice(1);
-}
+};
 
 // Now we can use the cookie in the next request for data
 exports.sourceNodes = async (
@@ -77,8 +77,11 @@ exports.sourceNodes = async (
               data += chunk;
             });
             res.on("end", () => {
-              // TODO: the following "products" must be generalized based on "object" string
-              JSON.parse(data)[object].map((objectData) => {
+              var items = JSON.parse(data)[object];
+              console.info(
+                `Creating ${items.length} Salonized item type "${object}"`
+              );
+              items.map((objectData) => {
                 createNode({
                   ...objectData,
                   id: "" + objectData.id,
@@ -95,13 +98,19 @@ exports.sourceNodes = async (
           }
         );
 
+        getDataRequest.on("error", (e) => {
+          console.error(
+            `Salonized - problem with getting data: ${e.message}`
+          );
+        });
+
         getDataRequest.end();
       });
     }
   );
 
   getCookieRequest.on("error", (e) => {
-    console.error(`problem with request: ${e.message}`);
+    console.error(`Salonized - problem with getting cookies: ${e.message}`);
   });
   const data = `${encodeURIComponent("user[email]")}=${encodeURIComponent(
     pluginOptions.salonizedEmail
