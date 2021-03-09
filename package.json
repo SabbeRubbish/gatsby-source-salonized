@@ -1,5 +1,5 @@
 {
-  "name": "@sabberubbish/gatsby-source-salonized",
+  "name": "gatsby-source-salonized",
   "version": "1.0.0",
   "description": "A source plugin that retrieves data from Salonized",
   "main": "index.js",
