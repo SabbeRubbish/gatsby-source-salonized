@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-salonized",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A source plugin that retrieves data from Salonized",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,7 @@
   },
   "keywords": [
     "gatsby",
+    "gatsby-plugin",
     "gatsby-source",
     "salonized",
     "salon app"
