@@ -16,7 +16,9 @@
   ],
   "author": "Sebastiaan Mindreau <sebastiaan.mindreau@gmail.com>",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "axios": "^0.21.1"
+  },
   "devDependencies": {},
   "repository": {
     "type": "git",

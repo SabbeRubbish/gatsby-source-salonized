@@ -22,7 +22,9 @@ npm install gatsby-source-salonized
 SALONIZED_EMAIL=<username>
 SALONIZED_PASSWORD=<password>
 ```
+
 and:
+
 ```javascript
 // In your gatsby-config.js
 module.exports = {
@@ -62,6 +64,7 @@ All fields that are returned from the Salonized API are available.
 ## Supported entity types
 
 Currently, the following entity types are available:
+
 - products
 - services
 - appointments
@@ -73,6 +76,10 @@ Currently, the following entity types are available:
 I'm still learning about useful API calls as there is no documentation from Salonized on this.
 
 **TODO:** links between content types (customer -> )
+
+## Dependencies
+
+- [axios](https://www.npmjs.com/package/axios) for smart (parallel) HTTPS querying (and much simpler and async code)
 
 ## Authentication (internals)
 
@@ -88,9 +95,16 @@ After that, the received cookie is used to get the other information out.
 
 There are no webhooks in Salonized (as far as I know) and the platform isn't really extensible for account owners. That means that content updates like orders, customers, products, .. are only updated on Gatsby build!
 
-This means that you need to rebuild your (static) Gatsby site for each content update you make. This is normal behaviour for these static Gatsby sites, but is definitely more problematic if no webhooks are available. 
+This means that you need to rebuild your (static) Gatsby site for each content update you make. This is normal behaviour for these static Gatsby sites, but is definitely more problematic if no webhooks are available.
 
 You were warned.
+
+## Version history
+
+| Version | Date       | Notes                            |
+| ------- | ---------- | -------------------------------- |
+| 1.1.0   | 2021-03-10 | Includes links in GraphQL schema |
+| 1.0.2   | 2021-03-09 | Basic working module             |
 
 ## License
 
