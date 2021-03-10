@@ -82,3 +82,41 @@ exports.sourceNodes = async (
     });
   });
 };
+
+/*exports.createSchemaCustomization = ({ actions, schema }) => {
+  const { createTypes } = actions;
+  const typedefs = [
+    schema.buildObjectType({
+      name: "salonizedAppointments",
+      fields: {
+        customer_id: "String!",
+        customer: {
+          type: "salonizedCustomers",
+          resolve: (source, args, context, info) => {
+            return context.nodeModel
+              .getAllNodes({ type: "salonizedCustomers" })
+              .find((cust) => cust.id === source.customer_id);
+          },
+        },
+      },
+      interfaces: ["Node"],
+    }),
+    schema.buildObjectType({
+      name: "salonizedCustomers",
+      fields: {
+        id: "Int!",
+      },
+      interfaces: ["Node"],
+    }),
+  ];
+  createTypes(`
+    type salonizedAppointments implements Node {
+      customer_id: String!
+      customer: salonizedCustomers @link(from: "salonizedCustomers.id" by: "customer_id")
+    }
+    type salonizedCustomers implements Node {
+      id: String!
+    }
+  `);
+  //createTypes(typedefs);
+};*/

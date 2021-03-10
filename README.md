@@ -101,10 +101,10 @@ You were warned.
 
 ## Version history
 
-| Version | Date       | Notes                            |
-| ------- | ---------- | -------------------------------- |
-| 1.1.0   | 2021-03-10 | Includes links in GraphQL schema |
-| 1.0.2   | 2021-03-09 | Basic working module             |
+| Version       | Date       | Notes                            |
+| ------------- | ---------- | -------------------------------- |
+| 1.1.0 (vNext) | TBD        | Includes links in GraphQL schema |
+| 1.0.2         | 2021-03-09 | Basic working module             |
 
 ## License
 
