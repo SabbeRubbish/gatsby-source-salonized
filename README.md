@@ -18,15 +18,14 @@ npm install gatsby-source-salonized
 
 1. You'll have to enter your admin username and password in the configuration of the plugin. I advise to use environment variable files `.env.development` and `env.production` for this:
 
-```text
+```text:title=process.env.*
 SALONIZED_EMAIL=<username>
 SALONIZED_PASSWORD=<password>
 ```
 
-and:
+and in your gatsby-config.js:
 
-```javascript
-// In your gatsby-config.js
+```javascript:title=gatsby-config.js
 module.exports = {
   plugins: [
     {
@@ -66,16 +65,30 @@ All fields that are returned from the Salonized API are available.
 Currently, the following entity types are available:
 
 - products
+  - product categories
 - services
+  - service categories
 - appointments
 - orders
 - customers
 - messages
 - customer feedback
+- notes
+- locations
+- resources (i.e. employees)
+- prepaid cards
+- timeline items (audit logs if you wish)
+- form submissions (like for COVID registration)
+- companies
+- suppliers
+- VAT rates
+
+Some items are not available through obvious APIs, like rosters and requirements.
 
 I'm still learning about useful API calls as there is no documentation from Salonized on this.
+In my demo setup I didn't always have form submissions, notes, .. That means I didn't know what dependencies they might have. If you need more dependencies resolved from these entities either fork this module or contact me [@SabbeRubbish](https://github.com/SabbeRubbish).
 
-**TODO:** links between content types (customer -> )
+**From v 1.1.0**: you can now also query entity links. So if an entity has a property `customer_id` there will be a field `customer` with all data available to use in your query.
 
 ## Dependencies
 
@@ -101,10 +114,10 @@ You were warned.
 
 ## Version history
 
-| Version       | Date       | Notes                            |
-| ------------- | ---------- | -------------------------------- |
-| 1.1.0 (vNext) | TBD        | Includes links in GraphQL schema |
-| 1.0.2         | 2021-03-09 | Basic working module             |
+| Version | Date       | Notes                                                                                                    |
+| ------- | ---------- | -------------------------------------------------------------------------------------------------------- |
+| 1.1.0   | 2021-03-11 | Includes links in GraphQL schema - <br/>**Breaking change**: entities are now singular instead of plural |
+| 1.0.2   | 2021-03-09 | Basic working module                                                                                     |
 
 ## License
 
